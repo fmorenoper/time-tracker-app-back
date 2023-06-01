@@ -1,6 +1,5 @@
-import logger from '../utils/logger';
-import mockData from './mock-data.js'
-
+import logger from '../utils/logger.js';
+import mockData from '../fake-data.js'
 const dbMock = [];
 
 export const db = {
@@ -12,7 +11,7 @@ export const db = {
     insert: function(obj) {
         if(obj) {
             dbMock.push(obj);
-            logger.debug('db insertion');
+            logger.debug('db:insert');
             logger.debug(obj);
         }
     },
@@ -24,6 +23,7 @@ export const db = {
                 return elem[key] === value;
             });
             dbMock.splice(index, 1);
+            logger.debug('db:delete');
         }
     },
     get: function(obj) {
@@ -31,6 +31,7 @@ export const db = {
             return dbMock.filter((elem) => {
                 const key = Object.keys(obj)[0];
                 const value = Object.values(obj)[0];
+                logger.debug('db:get')
                 return elem[key] === value;
             });
         }
