@@ -1,24 +1,39 @@
-import { MongoClient } from 'mongodb';
+import logger from '../utils/logger';
+import mockData from './mock-data.js'
 
-const DB_NAME = '<your db name here>';
+const dbMock = [];
 
 export const db = {
-    _dbClient: null,
-    connect: async function(url) {
-        const client = await MongoClient.connect(url, {
-            poolSize: 10,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-
-        this._dbClient = client;
+    init: function() {
+        logger.info('...... mock db init ......');
+        mockData.forEach((elem) => dbMock.push(elem));
+        logger.info('...... mock db loaded ......');
     },
-    getConnection: function() {
-        if (!this._dbClient) {
-            console.log('You need to call .connect() first!');
-            process.exit(1);
+    insert: function(obj) {
+        if(obj) {
+            dbMock.push(obj);
+            logger.debug('db insertion');
+            logger.debug(obj);
         }
-
-        return this._dbClient.db(DB_NAME);
+    },
+    delete: function(obj) {
+        if(obj) {
+            const index = dbMock.findIndex((elem) => {
+                const key = Object.keys(obj)[0];
+                const value = Object.values(obj)[0];
+                return elem[key] === value;
+            });
+            dbMock.splice(index, 1);
+        }
+    },
+    get: function(obj) {
+        if(obj) {
+            return dbMock.filter((elem) => {
+                const key = Object.keys(obj)[0];
+                const value = Object.values(obj)[0];
+                return elem[key] === value;
+            });
+        }
+        return dbMock;
     }
 }
