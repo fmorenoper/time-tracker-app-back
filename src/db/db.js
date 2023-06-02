@@ -1,5 +1,5 @@
 import logger from '../utils/logger.js';
-import mockData from '../fake-data.js'
+import mockData from '../mock-data.js'
 const dbMock = [];
 
 export const db = {
